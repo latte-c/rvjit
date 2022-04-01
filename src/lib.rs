@@ -1,3 +1,7 @@
+mod types;
+mod immediate;
+pub mod rv32i;
+
 #[cfg(test)]
 mod tests {
     #[test]

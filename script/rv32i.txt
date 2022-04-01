@@ -1,0 +1,47 @@
+imm[31:12] rd 0110111 U lui
+imm[31:12] rd 0010111 U auipc
+imm[20|10:1|11|19:12] rd 1101111 J jal
+imm[11:0] rs1 000 rd 1100111 I jalr
+imm[12|10:5] rs2 rs1 000 imm[4:1|11] 1100011 B beq
+imm[12|10:5] rs2 rs1 001 imm[4:1|11] 1100011 B bne
+imm[12|10:5] rs2 rs1 100 imm[4:1|11] 1100011 B blt
+imm[12|10:5] rs2 rs1 101 imm[4:1|11] 1100011 B bge
+imm[12|10:5] rs2 rs1 110 imm[4:1|11] 1100011 B bltu
+imm[12|10:5] rs2 rs1 111 imm[4:1|11] 1100011 B bgeu
+imm[11:0] rs1 000 rd 0000011 I lb
+imm[11:0] rs1 001 rd 0000011 I lh
+imm[11:0] rs1 010 rd 0000011 I lw
+imm[11:0] rs1 100 rd 0000011 I lbu
+imm[11:0] rs1 101 rd 0000011 I lhu
+imm[11:5] rs2 rs1 000 imm[4:0] 0100011 S sb
+imm[11:5] rs2 rs1 001 imm[4:0] 0100011 S sh
+imm[11:5] rs2 rs1 010 imm[4:0] 0100011 S sw
+imm[11:0] rs1 000 rd 0010011 I addi
+imm[11:0] rs1 010 rd 0010011 I slti
+imm[11:0] rs1 011 rd 0010011 I sltiu
+imm[11:0] rs1 100 rd 0010011 I xori
+imm[11:0] rs1 110 rd 0010011 I ori
+imm[11:0] rs1 111 rd 0010011 I andi
+0000000 shamt rs1 001 rd 0010011 I slli
+0000000 shamt rs1 101 rd 0010011 I srli
+0100000 shamt rs1 101 rd 0010011 I srai
+0000000 rs2 rs1 000 rd 0110011 R add
+0100000 rs2 rs1 000 rd 0110011 R sub
+0000000 rs2 rs1 001 rd 0110011 R sll
+0000000 rs2 rs1 010 rd 0110011 R slt
+0000000 rs2 rs1 011 rd 0110011 R sltu
+0000000 rs2 rs1 100 rd 0110011 R xor
+0000000 rs2 rs1 101 rd 0110011 R srl
+0100000 rs2 rs1 101 rd 0110011 R sra
+0000000 rs2 rs1 110 rd 0110011 R or
+0000000 rs2 rs1 111 rd 0110011 R and
+0000 pred succ 00000 000 00000 0001111 I fence
+0000 0000 0000 00000 001 00000 0001111 I fence.i
+000000000000 00000 001 00000 1110011 I ecall
+000000000000 00000 000 00000 1110011 I ebreak
+csr rs1 001 rd 1110011 I csrrw
+csr rs1 010 rd 1110011 I csrrs
+csr rs1 011 rd 1110011 I csrrc
+csr zimm 101 rd 1110011 I csrrwi
+csr zimm 110 rd 1110011 I csrrsi
+csr zimm 111 rd 1110011 I csrrci
