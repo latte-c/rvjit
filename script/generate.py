@@ -50,7 +50,7 @@ def gen_rv32i_inst(encode: str) -> str:
         func_body = f'rv_rtype({funct7}, rs2, rs1, {funct3}, rd, {opcode})'
     elif inst_type == 'S':
         funct3 = '0b' + splited[3]
-        func_signature = f'pub fn {inst_name}(imm: u32, rs1: u8, rs2: u8)'
+        func_signature = f'pub fn {inst_name}(rs1: u8, rs2: u8, imm: u32)'
         func_body = f'rv_stype(imm, rs2, rs1, {funct3}, {opcode})'
     else:
         raise Exception(f'unknown instruction type {inst_type}')

@@ -60,15 +60,15 @@ pub fn lhu(rd: u8, rs1: u8, imm: u32) -> u32 {
     rv_itype(imm, rs1, 0b101, rd, 0b0000011)
 }
 
-pub fn sb(imm: u32, rs1: u8, rs2: u8) -> u32 {
+pub fn sb(rs1: u8, rs2: u8, imm: u32) -> u32 {
     rv_stype(imm, rs2, rs1, 0b000, 0b0100011)
 }
 
-pub fn sh(imm: u32, rs1: u8, rs2: u8) -> u32 {
+pub fn sh(rs1: u8, rs2: u8, imm: u32) -> u32 {
     rv_stype(imm, rs2, rs1, 0b001, 0b0100011)
 }
 
-pub fn sw(imm: u32, rs1: u8, rs2: u8) -> u32 {
+pub fn sw(rs1: u8, rs2: u8, imm: u32) -> u32 {
     rv_stype(imm, rs2, rs1, 0b010, 0b0100011)
 }
 
