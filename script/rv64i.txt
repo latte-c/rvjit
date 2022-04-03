@@ -1,0 +1,15 @@
+imm[11:0] rs1 110 rd 0000011 I lwu
+imm[11:0] rs1 011 rd 0000011 I ld
+imm[11:5] rs2 rs1 011 imm[4:0] 0100011 S sd
+000000 shamt rs1 001 rd 0010011 I slli
+000000 shamt rs1 101 rd 0010011 I srli
+010000 shamt rs1 101 rd 0010011 I srai
+imm[11:0] rs1 000 rd 0011011 I addiw
+0000000 shamt rs1 001 rd 0011011 I slliw
+0000000 shamt rs1 101 rd 0011011 I srliw
+0100000 shamt rs1 101 rd 0011011 I sraiw
+0000000 rs2 rs1 000 rd 0111011 R addw
+0100000 rs2 rs1 000 rd 0111011 R subw
+0000000 rs2 rs1 001 rd 0111011 R sllw
+0000000 rs2 rs1 101 rd 0111011 R srlw
+0100000 rs2 rs1 101 rd 0111011 R sraw

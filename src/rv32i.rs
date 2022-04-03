@@ -96,15 +96,15 @@ pub fn andi(rd: u8, rs1: u8, imm: u32) -> u32 {
     rv_itype(imm, rs1, 0b111, rd, 0b0010011)
 }
 
-pub fn slli(rd: u8, rs1: u8, shamt: u8) -> u32 {
+pub fn slli32(rd: u8, rs1: u8, shamt: u8) -> u32 {
     rv_rtype(0b0000000, shamt, rs1, 0b001, rd, 0b0010011)
 }
 
-pub fn srli(rd: u8, rs1: u8, shamt: u8) -> u32 {
+pub fn srli32(rd: u8, rs1: u8, shamt: u8) -> u32 {
     rv_rtype(0b0000000, shamt, rs1, 0b101, rd, 0b0010011)
 }
 
-pub fn srai(rd: u8, rs1: u8, shamt: u8) -> u32 {
+pub fn srai32(rd: u8, rs1: u8, shamt: u8) -> u32 {
     rv_rtype(0b0100000, shamt, rs1, 0b101, rd, 0b0010011)
 }
 
