@@ -9,13 +9,13 @@ def gen_rv32i_inst(encode: str) -> str:
 
     if inst_name in ['csrrw', 'csrrs', 'csrrc', 'csrrwi', 'csrrsi', 'csrrci']:
         return ""
-    
+
     if inst_name in ['fence', 'fence.i']:
         return ""
-    
+
     if inst_name in ['ecall', 'ebreak']:
         funct3 = '0b' + splited[2]
-        return f'pub fn {inst_name}() -> u32 {{\n  rv_itype(0, 0, {funct3}, 0, {opcode})\n}}'
+        return f'pub fn {inst_name}() -> u32 {{\n  rv_itype({"1" if inst_name == "ebreak" else "0"}, 0, {funct3}, 0, {opcode})\n}}'
 
     if inst_type == 'U':
         # generate U type

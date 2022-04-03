@@ -149,9 +149,9 @@ pub fn and(rd: u8, rs1: u8, rs2: u8) -> u32 {
 }
 
 pub fn ecall() -> u32 {
-    rv_itype(0, 0, 0b001, 0, 0b1110011)
+    rv_itype(0, 0, 0b000, 0, 0b1110011)
 }
 
 pub fn ebreak() -> u32 {
-    rv_itype(0, 0, 0b000, 0, 0b1110011)
+    rv_itype(1, 0, 0b000, 0, 0b1110011)
 }
