@@ -1,4 +1,4 @@
-use create::types::*;
+use crate::types::*;
 
 pub fn lwu(rd: u8, rs1: u8, imm: u32) -> u32 {
     rv_itype(imm, rs1, 0b110, rd, 0b0000011)
@@ -15,7 +15,6 @@ pub fn sd(rs1: u8, rs2: u8, imm: u32) -> u32 {
 pub fn slli64(rd: u8, rs1: u8, shamt: u8) -> u32 {
     rv_itype(
         0b000000000000 | (shamt as u32 & 0b111111),
-        shamt,
         rs1,
         0b001,
         rd,
@@ -26,7 +25,6 @@ pub fn slli64(rd: u8, rs1: u8, shamt: u8) -> u32 {
 pub fn srli64(rd: u8, rs1: u8, shamt: u8) -> u32 {
     rv_itype(
         0b000000000000 | (shamt as u32 & 0b111111),
-        shamt,
         rs1,
         0b101,
         rd,
@@ -37,7 +35,6 @@ pub fn srli64(rd: u8, rs1: u8, shamt: u8) -> u32 {
 pub fn srai64(rd: u8, rs1: u8, shamt: u8) -> u32 {
     rv_itype(
         0b010000000000 | (shamt as u32 & 0b111111),
-        shamt,
         rs1,
         0b101,
         rd,

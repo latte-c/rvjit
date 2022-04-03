@@ -74,7 +74,7 @@ def gen_rv64i_inst(encode: str) -> str:
             funct7 = '0b' + splited[0]
             funct3 = '0b' + splited[3]
             func_signature = f'pub fn {inst_name}(rd: u8, rs1: u8, shamt: u8)'
-            func_body = f'rv_itype({funct7}000000 | (shamt as u32 & 0b111111), shamt, rs1, {funct3}, rd, {opcode})'
+            func_body = f'rv_itype({funct7}000000 | (shamt as u32 & 0b111111), rs1, {funct3}, rd, {opcode})'
         elif inst_name in ['slliw', 'srliw', 'sraiw']:
             funct7 = '0b' + splited[0]
             funct3 = '0b' + splited[3]
@@ -107,7 +107,7 @@ with open('../src/rv32i.rs', 'w') as of:
             of.write(inst + '\n\n')
 
 with open('../src/rv64i.rs', 'w') as of:
-    of.write('use create::types::*;\n\n')
+    of.write('use crate::types::*;\n\n')
     with open('rv64i.txt', 'r') as f:
         for l in f.readlines():
             inst = gen_rv64i_inst(l)
