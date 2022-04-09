@@ -1,0 +1,8 @@
+000 mul
+001 mulh
+010 mulhsu
+011 mulhu
+100 div
+101 divu
+110 rem
+111 remu
