@@ -1,0 +1,5 @@
+000 mulw
+100 divw
+101 divuw
+110 remw
+111 remuw

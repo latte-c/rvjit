@@ -110,6 +110,15 @@ def gen_rv32m(encode: str):
     return f'pub fn {inst_name}(rd: u8, rs1: u8, rs2: u8) -> u32 {{\n  rv_rtype({funct7}, rs2, rs1, {funct3}, rd, {opcode})\n}}'
 
 
+def gen_rv64m(encode: str):
+    splitted = encode.split(' ')
+    inst_name = splitted[-1]
+    funct3 = splitted[0]
+    funct7 = '0b0000001'
+    opcode = '0b0111011'
+    return f'pub fn {inst_name}(rd: u8, rs1: u8, rs2: u8) -> u32 {{\n  rv_rtype({funct7}, rs2, rs1, {funct3}, rd, {opcode})\n}}'
+
+
 with open('../src/rv32i.rs', 'w') as of:
     of.write('use crate::types::*;\n\n')
     with open('rv32i.txt', 'r') as f:
@@ -131,6 +140,14 @@ with open('../src/rv32m.rs', 'w') as of:
             inst = gen_rv32m(l)
             of.write(inst + '\n\n')
 
+with open('../src/rv64m.rs', 'w') as of:
+    of.write('use crate::types::*;\n\n')
+    with open('rv64m.txt', 'r') as f:
+        for l in f.readlines():
+            inst = gen_rv64m(l)
+            of.write(inst + '\n\n')
+
 os.system('rustfmt ../src/rv32i.rs')
 os.system('rustfmt ../src/rv64i.rs')
 os.system('rustfmt ../src/rv32m.rs')
+os.system('rustfmt ../src/rv64m.rs')
