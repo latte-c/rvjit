@@ -11,7 +11,7 @@ IMM_U = 934534535 & 0xfffff000
 IMM_J = 0b101101001001101001000  # 21 bits
 
 
-def gen_rv32i_inst_test(encode: str) -> str:
+def gen_rv32i_inst_test(encode: str, mode: str = "32") -> str:
     splited = encode.strip().split(' ')
     inst_name = splited[-1]
     inst_type = splited[-2]
@@ -25,7 +25,7 @@ def gen_rv32i_inst_test(encode: str) -> str:
 
     if inst_name in ['ecall', 'ebreak']:
         return f"""
-        #[test]
+        # [test]
         fn {inst_name}_test() {{
             let inst = {inst_name}();
             let decoded = dasm::decode(inst).expect("invalid instruction encoding");
@@ -46,9 +46,10 @@ def gen_rv32i_inst_test(encode: str) -> str:
                 ("imm", IMM_J)
             ]
         elif inst_type == 'I':
-            if inst_name in ['slli', 'srli', 'srai']:
-                inst_name = inst_name + '32'
-                param = [ 
+            if inst_name in ['slli', 'srli', 'srai', 'slliw', 'srliw', 'sraiw']:
+                if inst_name in ['slli', 'srli', 'srai']:
+                    inst_name = inst_name + mode
+                param = [
                     ("rd", RD),
                     ("rs1", RS1),
                     ("shamt", SHAMT)
@@ -86,7 +87,7 @@ def gen_rv32i_inst_test(encode: str) -> str:
     )
 
     return f"""
-    #[test]
+    # [test]
     fn {inst_name}_test() {{
         let inst = {inst_name}({inst_param});
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
@@ -97,6 +98,7 @@ def gen_rv32i_inst_test(encode: str) -> str:
         }}
     }}
     """
+
 
 REGS = """
 // general purpose registers
@@ -170,24 +172,28 @@ pub const T5: u8 = X30;
 pub const T6: u8 = X31;
 """
 
-
-with open('rv32i.txt', 'r') as f:
-    with open('../src/lib.rs', 'w') as of:
-        of.write(f"""mod immediate;
+with open('../src/lib.rs', 'w') as of:
+    of.write(f"""mod immediate;
         pub mod rv32i;
         pub mod rv64i;
         mod types;
 
         {REGS}
-        
-        #[cfg(test)]
+
+        # [cfg(test)]
         mod tests {{
             extern crate riscv_decode as dasm;
-            use crate::{{rv32i::*, *}};
+            use crate::{{rv32i::*, rv64i::*, *}};
         """)
+    with open('rv32i.txt', 'r') as f:
         for l in f.readlines():
             inst = gen_rv32i_inst_test(l)
             of.write(inst + '\n\n')
-        of.write("}\n")
+
+    with open('rv64i.txt', 'r') as f:
+        for l in f.readlines():
+            inst = gen_rv32i_inst_test(l, "64")
+            of.write(inst + '\n\n')
+    of.write("}\n")
 
 os.system('rustfmt ../src/lib.rs')
