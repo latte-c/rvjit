@@ -1,6 +1,8 @@
 mod immediate;
 pub mod rv32i;
+pub mod rv32m;
 pub mod rv64i;
+pub mod rv64m;
 mod types;
 
 // general purpose registers
@@ -76,7 +78,7 @@ pub const T6: u8 = X31;
 #[cfg(test)]
 mod tests {
     extern crate riscv_decode as dasm;
-    use crate::{rv32i::*, rv64i::*, *};
+    use crate::{rv32i::*, rv32m::*, rv64i::*, rv64m::*, *};
 
     #[test]
     fn lui_test() {
@@ -116,11 +118,11 @@ mod tests {
 
     #[test]
     fn jalr_test() {
-        let inst = jalr(A0, A1, 3375);
+        let inst = jalr(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Jalr(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -129,12 +131,12 @@ mod tests {
 
     #[test]
     fn beq_test() {
-        let inst = beq(4858, A1, A2);
+        let inst = beq(4858, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Beq(i) = decoded {
             assert_eq!(i.imm(), 4858 as u32, "imm test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -142,12 +144,12 @@ mod tests {
 
     #[test]
     fn bne_test() {
-        let inst = bne(4858, A1, A2);
+        let inst = bne(4858, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Bne(i) = decoded {
             assert_eq!(i.imm(), 4858 as u32, "imm test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -155,12 +157,12 @@ mod tests {
 
     #[test]
     fn blt_test() {
-        let inst = blt(4858, A1, A2);
+        let inst = blt(4858, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Blt(i) = decoded {
             assert_eq!(i.imm(), 4858 as u32, "imm test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -168,12 +170,12 @@ mod tests {
 
     #[test]
     fn bge_test() {
-        let inst = bge(4858, A1, A2);
+        let inst = bge(4858, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Bge(i) = decoded {
             assert_eq!(i.imm(), 4858 as u32, "imm test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -181,12 +183,12 @@ mod tests {
 
     #[test]
     fn bltu_test() {
-        let inst = bltu(4858, A1, A2);
+        let inst = bltu(4858, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Bltu(i) = decoded {
             assert_eq!(i.imm(), 4858 as u32, "imm test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -194,12 +196,12 @@ mod tests {
 
     #[test]
     fn bgeu_test() {
-        let inst = bgeu(4858, A1, A2);
+        let inst = bgeu(4858, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Bgeu(i) = decoded {
             assert_eq!(i.imm(), 4858 as u32, "imm test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -207,11 +209,11 @@ mod tests {
 
     #[test]
     fn lb_test() {
-        let inst = lb(A0, A1, 3375);
+        let inst = lb(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Lb(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -220,11 +222,11 @@ mod tests {
 
     #[test]
     fn lh_test() {
-        let inst = lh(A0, A1, 3375);
+        let inst = lh(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Lh(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -233,11 +235,11 @@ mod tests {
 
     #[test]
     fn lw_test() {
-        let inst = lw(A0, A1, 3375);
+        let inst = lw(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Lw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -246,11 +248,11 @@ mod tests {
 
     #[test]
     fn lbu_test() {
-        let inst = lbu(A0, A1, 3375);
+        let inst = lbu(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Lbu(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -259,11 +261,11 @@ mod tests {
 
     #[test]
     fn lhu_test() {
-        let inst = lhu(A0, A1, 3375);
+        let inst = lhu(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Lhu(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -272,11 +274,11 @@ mod tests {
 
     #[test]
     fn sb_test() {
-        let inst = sb(A1, A2, 3434);
+        let inst = sb(A2, A6, 3434);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sb(i) = decoded {
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
             assert_eq!(i.imm(), 3434 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -285,11 +287,11 @@ mod tests {
 
     #[test]
     fn sh_test() {
-        let inst = sh(A1, A2, 3434);
+        let inst = sh(A2, A6, 3434);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sh(i) = decoded {
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
             assert_eq!(i.imm(), 3434 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -298,11 +300,11 @@ mod tests {
 
     #[test]
     fn sw_test() {
-        let inst = sw(A1, A2, 3434);
+        let inst = sw(A2, A6, 3434);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sw(i) = decoded {
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
             assert_eq!(i.imm(), 3434 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -311,11 +313,11 @@ mod tests {
 
     #[test]
     fn addi_test() {
-        let inst = addi(A0, A1, 3375);
+        let inst = addi(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Addi(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -324,11 +326,11 @@ mod tests {
 
     #[test]
     fn slti_test() {
-        let inst = slti(A0, A1, 3375);
+        let inst = slti(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Slti(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -337,11 +339,11 @@ mod tests {
 
     #[test]
     fn sltiu_test() {
-        let inst = sltiu(A0, A1, 3375);
+        let inst = sltiu(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sltiu(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -350,11 +352,11 @@ mod tests {
 
     #[test]
     fn xori_test() {
-        let inst = xori(A0, A1, 3375);
+        let inst = xori(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Xori(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -363,11 +365,11 @@ mod tests {
 
     #[test]
     fn ori_test() {
-        let inst = ori(A0, A1, 3375);
+        let inst = ori(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Ori(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -376,11 +378,11 @@ mod tests {
 
     #[test]
     fn andi_test() {
-        let inst = andi(A0, A1, 3375);
+        let inst = andi(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Andi(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -389,11 +391,11 @@ mod tests {
 
     #[test]
     fn slli32_test() {
-        let inst = slli32(A0, A1, 28);
+        let inst = slli32(A0, A2, 28);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Slli(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.shamt(), 28 as u32, "shamt test failed");
         } else {
             panic!("opcode test failed");
@@ -402,11 +404,11 @@ mod tests {
 
     #[test]
     fn srli32_test() {
-        let inst = srli32(A0, A1, 28);
+        let inst = srli32(A0, A2, 28);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Srli(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.shamt(), 28 as u32, "shamt test failed");
         } else {
             panic!("opcode test failed");
@@ -415,11 +417,11 @@ mod tests {
 
     #[test]
     fn srai32_test() {
-        let inst = srai32(A0, A1, 28);
+        let inst = srai32(A0, A2, 28);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Srai(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.shamt(), 28 as u32, "shamt test failed");
         } else {
             panic!("opcode test failed");
@@ -428,12 +430,12 @@ mod tests {
 
     #[test]
     fn add_test() {
-        let inst = add(A0, A1, A2);
+        let inst = add(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Add(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -441,12 +443,12 @@ mod tests {
 
     #[test]
     fn sub_test() {
-        let inst = sub(A0, A1, A2);
+        let inst = sub(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sub(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -454,12 +456,12 @@ mod tests {
 
     #[test]
     fn sll_test() {
-        let inst = sll(A0, A1, A2);
+        let inst = sll(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sll(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -467,12 +469,12 @@ mod tests {
 
     #[test]
     fn slt_test() {
-        let inst = slt(A0, A1, A2);
+        let inst = slt(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Slt(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -480,12 +482,12 @@ mod tests {
 
     #[test]
     fn sltu_test() {
-        let inst = sltu(A0, A1, A2);
+        let inst = sltu(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sltu(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -493,12 +495,12 @@ mod tests {
 
     #[test]
     fn xor_test() {
-        let inst = xor(A0, A1, A2);
+        let inst = xor(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Xor(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -506,12 +508,12 @@ mod tests {
 
     #[test]
     fn srl_test() {
-        let inst = srl(A0, A1, A2);
+        let inst = srl(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Srl(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -519,12 +521,12 @@ mod tests {
 
     #[test]
     fn sra_test() {
-        let inst = sra(A0, A1, A2);
+        let inst = sra(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sra(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -532,12 +534,12 @@ mod tests {
 
     #[test]
     fn or_test() {
-        let inst = or(A0, A1, A2);
+        let inst = or(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Or(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -545,12 +547,12 @@ mod tests {
 
     #[test]
     fn and_test() {
-        let inst = and(A0, A1, A2);
+        let inst = and(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::And(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -576,11 +578,11 @@ mod tests {
 
     #[test]
     fn lwu_test() {
-        let inst = lwu(A0, A1, 3375);
+        let inst = lwu(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Lwu(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -589,11 +591,11 @@ mod tests {
 
     #[test]
     fn ld_test() {
-        let inst = ld(A0, A1, 3375);
+        let inst = ld(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Ld(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -602,11 +604,11 @@ mod tests {
 
     #[test]
     fn sd_test() {
-        let inst = sd(A1, A2, 3434);
+        let inst = sd(A2, A6, 3434);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sd(i) = decoded {
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
             assert_eq!(i.imm(), 3434 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -615,11 +617,11 @@ mod tests {
 
     #[test]
     fn slli64_test() {
-        let inst = slli64(A0, A1, 28);
+        let inst = slli64(A0, A2, 28);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Slli(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.shamt(), 28 as u32, "shamt test failed");
         } else {
             panic!("opcode test failed");
@@ -628,11 +630,11 @@ mod tests {
 
     #[test]
     fn srli64_test() {
-        let inst = srli64(A0, A1, 28);
+        let inst = srli64(A0, A2, 28);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Srli(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.shamt(), 28 as u32, "shamt test failed");
         } else {
             panic!("opcode test failed");
@@ -641,11 +643,11 @@ mod tests {
 
     #[test]
     fn srai64_test() {
-        let inst = srai64(A0, A1, 28);
+        let inst = srai64(A0, A2, 28);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Srai(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.shamt(), 28 as u32, "shamt test failed");
         } else {
             panic!("opcode test failed");
@@ -654,11 +656,11 @@ mod tests {
 
     #[test]
     fn addiw_test() {
-        let inst = addiw(A0, A1, 3375);
+        let inst = addiw(A0, A2, 3375);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Addiw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.imm(), 3375 as u32, "imm test failed");
         } else {
             panic!("opcode test failed");
@@ -667,11 +669,11 @@ mod tests {
 
     #[test]
     fn slliw_test() {
-        let inst = slliw(A0, A1, 28);
+        let inst = slliw(A0, A2, 28);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Slliw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.shamt(), 28 as u32, "shamt test failed");
         } else {
             panic!("opcode test failed");
@@ -680,11 +682,11 @@ mod tests {
 
     #[test]
     fn srliw_test() {
-        let inst = srliw(A0, A1, 28);
+        let inst = srliw(A0, A2, 28);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Srliw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.shamt(), 28 as u32, "shamt test failed");
         } else {
             panic!("opcode test failed");
@@ -693,11 +695,11 @@ mod tests {
 
     #[test]
     fn sraiw_test() {
-        let inst = sraiw(A0, A1, 28);
+        let inst = sraiw(A0, A2, 28);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sraiw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
             assert_eq!(i.shamt(), 28 as u32, "shamt test failed");
         } else {
             panic!("opcode test failed");
@@ -706,12 +708,12 @@ mod tests {
 
     #[test]
     fn addw_test() {
-        let inst = addw(A0, A1, A2);
+        let inst = addw(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Addw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -719,12 +721,12 @@ mod tests {
 
     #[test]
     fn subw_test() {
-        let inst = subw(A0, A1, A2);
+        let inst = subw(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Subw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -732,12 +734,12 @@ mod tests {
 
     #[test]
     fn sllw_test() {
-        let inst = sllw(A0, A1, A2);
+        let inst = sllw(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sllw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -745,12 +747,12 @@ mod tests {
 
     #[test]
     fn srlw_test() {
-        let inst = srlw(A0, A1, A2);
+        let inst = srlw(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Srlw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
         } else {
             panic!("opcode test failed");
         }
@@ -758,12 +760,168 @@ mod tests {
 
     #[test]
     fn sraw_test() {
-        let inst = sraw(A0, A1, A2);
+        let inst = sraw(A0, A2, A6);
         let decoded = dasm::decode(inst).expect("invalid instruction encoding");
         if let dasm::Instruction::Sraw(i) = decoded {
             assert_eq!(i.rd(), A0 as u32, "rd test failed");
-            assert_eq!(i.rs1(), A1 as u32, "rs1 test failed");
-            assert_eq!(i.rs2(), A2 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn mul_test() {
+        let decoded = dasm::decode(mul(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Mul(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn mulh_test() {
+        let decoded = dasm::decode(mulh(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Mulh(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn mulhsu_test() {
+        let decoded = dasm::decode(mulhsu(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Mulhsu(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn mulhu_test() {
+        let decoded = dasm::decode(mulhu(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Mulhu(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn div_test() {
+        let decoded = dasm::decode(div(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Div(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn divu_test() {
+        let decoded = dasm::decode(divu(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Divu(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn rem_test() {
+        let decoded = dasm::decode(rem(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Rem(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn remu_test() {
+        let decoded = dasm::decode(remu(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Remu(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn mulw_test() {
+        let decoded = dasm::decode(mulw(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Mulw(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn divw_test() {
+        let decoded = dasm::decode(divw(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Divw(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn divuw_test() {
+        let decoded = dasm::decode(divuw(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Divuw(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn remw_test() {
+        let decoded = dasm::decode(remw(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Remw(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
+        } else {
+            panic!("opcode test failed");
+        }
+    }
+
+    #[test]
+    fn remuw_test() {
+        let decoded = dasm::decode(remuw(A0, A2, A6)).expect("invalid instruction encoding");
+        if let dasm::Instruction::Remuw(i) = decoded {
+            assert_eq!(i.rd(), A0 as u32, "rd test failed");
+            assert_eq!(i.rs2(), A6 as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), A2 as u32, "rs1 test failed");
         } else {
             panic!("opcode test failed");
         }

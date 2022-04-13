@@ -104,7 +104,7 @@ def gen_rv32m(encode: str):
     # only R type,
     splitted = encode.split(' ')
     inst_name = splitted[-1]
-    funct3 = splitted[0]
+    funct3 = '0b' + splitted[0]
     funct7 = '0b0000001'
     opcode = '0b0110011'
     return f'pub fn {inst_name}(rd: u8, rs1: u8, rs2: u8) -> u32 {{\n  rv_rtype({funct7}, rs2, rs1, {funct3}, rd, {opcode})\n}}'
@@ -113,7 +113,7 @@ def gen_rv32m(encode: str):
 def gen_rv64m(encode: str):
     splitted = encode.split(' ')
     inst_name = splitted[-1]
-    funct3 = splitted[0]
+    funct3 = '0b' + splitted[0]
     funct7 = '0b0000001'
     opcode = '0b0111011'
     return f'pub fn {inst_name}(rd: u8, rs1: u8, rs2: u8) -> u32 {{\n  rv_rtype({funct7}, rs2, rs1, {funct3}, rd, {opcode})\n}}'

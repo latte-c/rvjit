@@ -1,7 +1,7 @@
 import os
 
-RS1 = 'A1'
-RS2 = 'A2'
+RS1 = 'A2'
+RS2 = 'A6'
 RD = 'A0'
 SHAMT = 0b11100
 IMM_I = 0b110100101111  # 12 bits
@@ -100,6 +100,25 @@ def gen_rv32i_inst_test(encode: str, mode: str = "32") -> str:
     """
 
 
+def gen_rv32m_test(encode: str) -> str:
+    [funct3, name] = encode.strip().split(' ')
+    dasm_name = name[0].upper() + name[1:]
+    TEMPLATE = f"""
+    #[test]
+    fn {name}_test() {{
+        let decoded = dasm::decode({name}({RD}, {RS1}, {RS2})).expect("invalid instruction encoding");
+        if let dasm::Instruction::{dasm_name}(i) = decoded {{
+            assert_eq!(i.rd(), {RD} as u32, "rd test failed");
+            assert_eq!(i.rs2(), {RS2} as u32, "rs2 test failed");
+            assert_eq!(i.rs1(), {RS1} as u32, "rs1 test failed");
+        }} else {{
+            panic!("opcode test failed");
+        }}
+    }}
+    """
+    return TEMPLATE
+
+
 REGS = """
 // general purpose registers
 // from x0 to x31, 32 integer registers, in u8
@@ -176,6 +195,8 @@ with open('../src/lib.rs', 'w') as of:
     of.write(f"""mod immediate;
         pub mod rv32i;
         pub mod rv64i;
+        pub mod rv32m;
+        pub mod rv64m;
         mod types;
 
         {REGS}
@@ -183,7 +204,7 @@ with open('../src/lib.rs', 'w') as of:
         # [cfg(test)]
         mod tests {{
             extern crate riscv_decode as dasm;
-            use crate::{{rv32i::*, rv64i::*, *}};
+            use crate::{{rv32i::*, rv64i::*, rv32m::*, rv64m::*, *}};
         """)
     with open('rv32i.txt', 'r') as f:
         for l in f.readlines():
@@ -193,6 +214,16 @@ with open('../src/lib.rs', 'w') as of:
     with open('rv64i.txt', 'r') as f:
         for l in f.readlines():
             inst = gen_rv32i_inst_test(l, "64")
+            of.write(inst + '\n\n')
+
+    with open('rv32m.txt', 'r') as f:
+        for l in f.readlines():
+            inst = gen_rv32m_test(l)
+            of.write(inst + '\n\n')
+
+    with open('rv64m.txt', 'r') as f:
+        for l in f.readlines():
+            inst = gen_rv32m_test(l)
             of.write(inst + '\n\n')
     of.write("}\n")
 
