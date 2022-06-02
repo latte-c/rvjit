@@ -5,9 +5,9 @@
 * RV32I
 * RV64I
 * RV32M
+* RV64M
 
 ## Future
 
 * RV32A
 * RV64A
-* RV64M
